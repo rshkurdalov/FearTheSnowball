@@ -178,8 +178,6 @@ FTransform ASearchPlayerStart::SearchNewLocation() const
 	{
 		const FRotator spawnWay = FRotator(0.f, FMath::RadiansToDegrees(spawnAngle), 0.f);
 
-		UE_LOG(LogTemp, Warning, TEXT("Debug: %f"), spawnWay.Yaw);
-
 		const FVector spawnDirection = spawnWay.RotateVector({ 1.f, 0.f, 0.f });
 		const float spawnDistance = FMath::RandRange(InnerRadius, OuterRadius);
 		const FVector localSpawnPoint = spawnDistance * spawnDirection;
