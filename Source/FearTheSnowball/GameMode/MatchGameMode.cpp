@@ -1,12 +1,24 @@
 
 #include "MatchGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "PlayerState/MatchPlayerState.h"
 #include "GameObjects/SearchPlayerStart.h"
+
+AMatchGameMode::AMatchGameMode() 
+{
+	PlayerStateClass = AMatchPlayerState::StaticClass();
+}
 
 void AMatchGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	FindSearchPlayer();
+}
+
+void AMatchGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	if (auto playerState = NewPlayer->GetPlayerState<AMatchPlayerState>())
+		playerState->Color = playerColor.FindNextColor();
 }
 
 void AMatchGameMode::FindSearchPlayer() 
@@ -40,7 +52,7 @@ void AMatchGameMode::TryExecuteSpawning()
 	for (auto controller : WaitToSpawn) {
 		FTransform spawnTransform = SearchPlayerStart->SearchNewLocation();
 
-		// With pawn restart has strange behavior.
+		// Restart has strange behavior when pawn exist.
 		if (auto pawn = controller->GetPawn()) {
 			pawn->Destroy();
 			controller->SetPawn(nullptr);
