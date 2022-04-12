@@ -39,6 +39,13 @@ void AMatchGameMode::TryExecuteSpawning()
 
 	for (auto controller : WaitToSpawn) {
 		FTransform spawnTransform = SearchPlayerStart->SearchNewLocation();
+
+		// With pawn restart has strange behavior.
+		if (auto pawn = controller->GetPawn()) {
+			pawn->Destroy();
+			controller->SetPawn(nullptr);
+		}
+
 		Super::RestartPlayerAtTransform(controller, spawnTransform);
 	}
 
