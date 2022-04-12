@@ -10,7 +10,7 @@ class FEARTHESNOWBALL_API AMatchPlayerState : public APlayerState
 	GENERATED_BODY()
 		
 public:
-	UPROPERTY(Replicated)
+	UPROPERTY(BlueprintReadOnly, Replicated)
 	FColor Color = FColor::Red;
 
 protected:

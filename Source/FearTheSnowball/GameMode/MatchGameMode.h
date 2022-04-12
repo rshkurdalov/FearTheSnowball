@@ -19,6 +19,8 @@ public:
 	void PostLogin(APlayerController* NewPlayer) override;
 	void RestartPlayer(AController* NewPlayer) override;
 
+	void WinGame(APlayerController* winner);
+
 private:
 	void FindSearchPlayer();
 	void TryExecuteSpawning();

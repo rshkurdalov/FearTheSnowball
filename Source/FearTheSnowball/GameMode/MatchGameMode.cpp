@@ -17,6 +17,7 @@ void AMatchGameMode::BeginPlay()
 
 void AMatchGameMode::PostLogin(APlayerController* NewPlayer)
 {
+	Super::PostLogin(NewPlayer);
 	if (auto playerState = NewPlayer->GetPlayerState<AMatchPlayerState>())
 		playerState->Color = playerColor.FindNextColor();
 }
@@ -62,6 +63,14 @@ void AMatchGameMode::TryExecuteSpawning()
 	}
 
 	WaitToSpawn.Empty();
+}
+
+void AMatchGameMode::WinGame(APlayerController* winner)
+{
+	if (!winner)
+		return;
+
+	UE_LOG(LogGameMode, Warning, TEXT("Player win: %s"), *GetDebugName(winner));
 }
 
 void AMatchGameMode::RestartPlayer(AController* NewPlayer)
