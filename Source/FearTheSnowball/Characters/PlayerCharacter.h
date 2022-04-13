@@ -5,6 +5,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class UEndGameWidget;
 
 UCLASS()
 class FEARTHESNOWBALL_API APlayerCharacter : public ACharacter
@@ -19,6 +20,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UEndGameWidget> EndGameWidgetClass;
+
+	UFUNCTION(Client, Reliable)
+	void EndGame(bool isWinner);
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,6 +44,9 @@ protected:
 
 	UFUNCTION()
 	void LookVertical(float Value);
+
+	UPROPERTY()
+	UEndGameWidget* EndGameWidget;
 
 public:
 	virtual void Tick(float DeltaTime) override;

@@ -41,9 +41,16 @@ void ACapturePoint::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
 
     if (HasAuthority())
-        TickServer(DeltaSeconds);
+    {
+        if (GetNetMode() == NM_DedicatedServer)
+            TickServer(DeltaSeconds);
+        else if (GetNetMode() == NM_ListenServer)
+            TickListener(DeltaSeconds);
+    }
     else
+    {
         TickClient(DeltaSeconds);
+    }
 }
 
 void ACapturePoint::PostEditChangeProperty(struct FPropertyChangedEvent& e)
@@ -107,6 +114,12 @@ void ACapturePoint::UpdateAreaRadius()
 void ACapturePoint::TickServer(float DeltaSeconds)
 {
     UpdateProgress(DeltaSeconds);
+    HandleProgress();
+}
+
+void ACapturePoint::TickListener(float DeltaSeconds)
+{
+    TickClient(DeltaSeconds);
     HandleProgress();
 }
 

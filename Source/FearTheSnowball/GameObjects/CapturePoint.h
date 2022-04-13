@@ -59,6 +59,8 @@ protected:
 
 	void TickServer(float DeltaSeconds);
 	
+	void TickListener(float DeltaSeconds);
+
 	void TickClient(float DeltaSeconds);
 
 	void RecalculateCapturingState(bool forceUpdate = false);

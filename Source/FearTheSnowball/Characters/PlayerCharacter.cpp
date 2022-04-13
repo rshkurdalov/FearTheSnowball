@@ -1,6 +1,7 @@
 
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "UI/EndGameWidget.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -9,11 +10,26 @@ APlayerCharacter::APlayerCharacter()
 	BaseCameraRotator = CreateDefaultSubobject<USceneComponent>(TEXT("BaseCameraRotator"));
 	BaseCameraRotator->SetupAttachment(RootComponent);
 	BaseCameraRotator->SetRelativeRotation(FRotator(345.f, 0.f, 0.f));
-
+	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	CameraComponent->SetupAttachment(BaseCameraRotator);
 	CameraComponent->SetRelativeLocation(FVector(-350, 0, 0.f));
 	CameraComponent->FieldOfView = 100.f;
+}
+
+
+void APlayerCharacter::EndGame_Implementation(bool isWinner)
+{
+	if (HasAuthority() && GetNetMode() == NM_DedicatedServer)
+		return;
+
+	EndGameWidget = CreateWidget<UEndGameWidget>(Cast<APlayerController>(GetController()), EndGameWidgetClass);
+	
+	if (!EndGameWidget)
+		return;
+
+	EndGameWidget->AddToViewport();
+	EndGameWidget->OnEndGame(isWinner);
 }
 
 void APlayerCharacter::BeginPlay()

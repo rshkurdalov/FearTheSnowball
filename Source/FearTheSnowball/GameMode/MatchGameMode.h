@@ -32,4 +32,6 @@ private:
 	TArray<AController*> WaitToSpawn;
 
 	FColorPicker playerColor;
+
+	bool gameWon = false;
 };

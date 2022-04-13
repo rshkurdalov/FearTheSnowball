@@ -3,6 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerState/MatchPlayerState.h"
 #include "GameObjects/SearchPlayerStart.h"
+#include "Characters/PlayerCharacter.h"
 
 AMatchGameMode::AMatchGameMode() 
 {
@@ -67,10 +68,27 @@ void AMatchGameMode::TryExecuteSpawning()
 
 void AMatchGameMode::WinGame(APlayerController* winner)
 {
+	if (gameWon)
+		return;
+
+	gameWon = true;
+
 	if (!winner)
 		return;
 
-	UE_LOG(LogGameMode, Warning, TEXT("Player win: %s"), *GetDebugName(winner));
+	TArray<AActor*> players;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerController::StaticClass(), players);
+
+	for (auto player : players) 
+	{
+		auto controller = Cast<APlayerController>(player);
+		bool isWinner = controller == winner;
+
+		if (auto character = Cast<APlayerCharacter>(controller->GetPawn()))
+		{
+			character->EndGame(isWinner);
+		}
+	}
 }
 
 void AMatchGameMode::RestartPlayer(AController* NewPlayer)
